@@ -1,10 +1,10 @@
 <template>
 
   <el-row>
-    <el-col :span="4">
+    <el-col :span="5">
       <el-row>
-        <a @click="chooseFile()" id="fileicon"><i class="far fa-file fa-2x" id="thefileicon"></i><span id="files">Files</span></a>
-        <a @click="chooseDatabase()" id="fileicon2"><i class="fas fa-database fa-2x" id="thefileicon2"></i><span id="database">Databases</span></a>
+        <el-button type="text" @click="chooseFile()"><i class="far fa-file fa-2x" id="thefileicon"></i><span id="files">Files</span></el-button>
+        <el-button type="text" @click="chooseDatabase()"><i class="fas fa-database fa-2x" id="thefileicon2"></i><span id="database">Databases</span></el-button>
       </el-row>
       <el-tree :data="data1" :props="defaultProps" class="tree" v-if="this.leftMode=='file'">
       </el-tree>
@@ -35,16 +35,29 @@
           <codemirror v-model="code" :options="cmOptions"></codemirror>
         </div>
         <div class="single-row-block3">
-          <el-col :span="4" id="col"><a>
+          <el-col :span="7" id="queryresult"><a>
+              <i class="far fa-comment-alt fa-2x"></i>
+              <el-button type="text" @click="chooseResult()" id="queryresult2">Query Result</el-button>
+            </a>
+          </el-col>
+          <el-col :span="7" id="savedqueries"><a>
               <i class="far fa-save fa-2x"></i>
-              <el-button type="text" id="textbutton">Saved Queries</el-button>
+              <el-button type="text" id="savedqueries2" @click="chooseSaved()">Saved Queries</el-button>
             </a>
           </el-col>
-          <el-col :span="7" id="col"><a>
+          <el-col :span="7" id="queryhistory"><a>
               <i class="fas fa-search fa-2x"></i>
-              <el-button type="text" id="textbutton">Query History</el-button>
+              <el-button type="text" id="queryhistory2" @click="chooseHistory()">Query History</el-button>
             </a>
           </el-col>
+        </div>
+        <div class="single-row-block4">
+          <el-table :data="savedqueries" style="width: 100%">
+            <el-table-column prop="date" label="时间" width="180">
+            </el-table-column>
+            <el-table-column prop="content" label="查询文件" width="180">
+            </el-table-column>
+          </el-table>
         </div>
 
       </el-main>
@@ -53,13 +66,43 @@
 </template>
 <script>
 import { codemirror } from "vue-codemirror";
-require("codemirror/addon/fold/foldcode.js");
-require("codemirror/addon/fold/foldgutter.js");
-require("codemirror/addon/fold/brace-fold.js");
-require("codemirror/addon/fold/xml-fold.js");
-require("codemirror/addon/fold/indent-fold.js");
-require("codemirror/addon/fold/markdown-fold.js");
-require("codemirror/addon/fold/comment-fold.js");
+import "codemirror/mode/sql/sql.js";
+// theme css
+import "codemirror/theme/monokai.css";
+// require active-line.js
+import "codemirror/addon/selection/active-line.js";
+// styleSelectedText
+import "codemirror/addon/selection/mark-selection.js";
+import "codemirror/addon/search/searchcursor.js";
+// hint
+import "codemirror/addon/hint/show-hint.js";
+import "codemirror/addon/hint/show-hint.css";
+import "codemirror/addon/hint/javascript-hint.js";
+import "codemirror/addon/selection/active-line.js";
+// highlightSelectionMatches
+import "codemirror/addon/scroll/annotatescrollbar.js";
+import "codemirror/addon/search/matchesonscrollbar.js";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/match-highlighter.js";
+// keyMap
+import "codemirror/mode/clike/clike.js";
+import "codemirror/addon/edit/matchbrackets.js";
+import "codemirror/addon/comment/comment.js";
+import "codemirror/addon/dialog/dialog.js";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/search.js";
+import "codemirror/keymap/sublime.js";
+// foldGutter
+import "codemirror/addon/fold/foldgutter.css";
+import "codemirror/addon/fold/brace-fold.js";
+import "codemirror/addon/fold/comment-fold.js";
+import "codemirror/addon/fold/foldcode.js";
+import "codemirror/addon/fold/foldgutter.js";
+import "codemirror/addon/fold/indent-fold.js";
+import "codemirror/addon/fold/markdown-fold.js";
+import "codemirror/addon/fold/xml-fold.js";
+
 export default {
   methods: {
     onCmReady(cm) {
@@ -73,22 +116,42 @@ export default {
       this.code = newCode;
     },
     chooseFile() {
-      document.getElementById("fileicon").style.color = "#344352";
       document.getElementById("thefileicon").style.color = "#344352";
       document.getElementById("files").style.color = "#344352";
-      document.getElementById("fileicon2").style.color = "white";
       document.getElementById("thefileicon2").style.color = "white";
       document.getElementById("database").style.color = "white";
       this.leftMode = "file";
     },
     chooseDatabase() {
-      document.getElementById("fileicon").style.color = "white";
       document.getElementById("thefileicon").style.color = "white";
       document.getElementById("files").style.color = "white";
-      document.getElementById("fileicon2").style.color = "#344352";
       document.getElementById("thefileicon2").style.color = "#344352";
       document.getElementById("database").style.color = "#344352";
       this.leftMode = "database";
+    },
+    chooseResult() {
+      document.getElementById("queryresult").style.color = "#8db6ec";
+      document.getElementById("savedqueries").style.color = "white";
+      document.getElementById("queryhistory").style.color = "white";
+      document.getElementById("queryresult2").style.color = "#8db6ec";
+      document.getElementById("savedqueries2").style.color = "white";
+      document.getElementById("queryhistory2").style.color = "white";
+    },
+    chooseSaved() {
+      document.getElementById("savedqueries").style.color = "#8db6ec";
+      document.getElementById("queryhistory").style.color = "white";
+      document.getElementById("queryresult").style.color = "white";
+      document.getElementById("savedqueries2").style.color = "#8db6ec";
+      document.getElementById("queryhistory2").style.color = "white";
+      document.getElementById("queryresult2").style.color = "white";
+    },
+    chooseHistory() {
+      document.getElementById("queryhistory").style.color = "#8db6ec";
+      document.getElementById("queryresult").style.color = "white";
+      document.getElementById("savedqueries").style.color = "white";
+      document.getElementById("queryhistory2").style.color = "#8db6ec";
+      document.getElementById("queryresult2").style.color = "white";
+      document.getElementById("savedqueries2").style.color = "white";
     }
   },
   computed: {
@@ -103,23 +166,42 @@ export default {
     document.getElementById("fileicon").style.color = "#344352";
     document.getElementById("thefileicon").style.color = "#344352";
     document.getElementById("files").style.color = "#344352";
+    setTimeout(() => {
+      (this.styleSelectedText = true), (this.cmOption.styleActiveLine = true);
+    }, 1800);
   },
   data() {
-    const item = {
-      date: "2016-05-02",
-      name: "王小虎",
-      address: "上海市普陀区金沙江路 1518 弄"
-    };
     return {
+      savedqueries: [
+        {
+          date: "8小时前",
+          content: "nm$l.sql"
+        }
+      ],
       leftMode: "file",
-      code: 'const str = "hello world"',
+      bottomMode: "result",
+      code: "create table nm$l",
       cmOptions: {
         // codemirror options
         tabSize: 4,
-        mode: "text/javascript",
-        theme: "base16-dark",
+        styleActiveLine: true,
+        mode: "text/x-sql",
+        theme: "monokai",
         lineNumbers: true,
-        line: true
+        line: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
+        hintOptions: {
+          // 当匹配只有一项的时候是否自动补全
+          completeSingle: false
+        },
+        keyMap: "sublime",
+        styleActiveLine: false,
+        styleSelectedText: false,
+        matchBrackets: true,
+        showCursorWhenSelecting: true,
+        extraKeys: { Ctrl: "autocomplete" }
       },
       data1: [
         {
@@ -159,7 +241,6 @@ export default {
           ]
         }
       ],
-      tableData: Array(20).fill(item),
       defaultProps: {
         children: "children",
         label: "label"
@@ -170,6 +251,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#queryhistory {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: white;
+}
+#queryhistory2 {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: white;
+}
+#queryresult {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: #8db6ec;
+}
+#queryresult2 {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: #8db6ec;
+}
+#savedqueries {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: white;
+}
+#savedqueries2 {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-right: 20px;
+  color: white;
+}
 #col {
   margin-left: 6px;
   margin-top: 6px;
@@ -205,9 +322,9 @@ export default {
   left: 10px;
 }
 #thefileicon {
-  color: white;
+  color: #344352;
   position: relative;
-  top: 16px;
+  top: 30px;
   left: 10px;
 }
 #fileicon2 {
@@ -219,18 +336,20 @@ export default {
 #thefileicon2 {
   color: white;
   position: relative;
-  top: 1px;
+  top: 30px;
   left: 12px;
 }
 #files {
   position: relative;
-  top: 15px;
+  top: 30px;
   left: 13px;
+  color: #344352;
 }
 #database {
   position: relative;
-  top: 1px;
+  top: 30px;
   left: 17px;
+  color: white;
 }
 #textbutton {
   color: white;

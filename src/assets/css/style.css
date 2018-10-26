@@ -13,6 +13,15 @@ body {
   padding: 0;
   position: relative;
 }
+.single-row-block4 {
+  width: 100%;
+  background-color: #25394d;
+  height: 300px;
+  border-radius: 1px;
+  border-bottom: 0px;
+  position: relative;
+  top: -15px;
+}
 .single-row-block3 {
   width: 100%;
   background-color: #344352;
