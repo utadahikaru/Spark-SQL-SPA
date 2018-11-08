@@ -24,11 +24,6 @@
               <el-button type="text" id="textbutton">Execute</el-button>
             </el-col>
 
-            <el-col :span="3 " id="col">
-              <i class="far fa-edit fa-2x"></i>
-              <el-button type="text" id="textbutton">Edit</el-button>
-            </el-col>
-
           </el-row>
         </div>
         <div class="single-row-block">
@@ -38,11 +33,6 @@
           <el-col :span="7" id="queryresult"><a>
               <i class="far fa-comment-alt fa-2x"></i>
               <el-button type="text" @click="chooseResult()" id="queryresult2">Query Result</el-button>
-            </a>
-          </el-col>
-          <el-col :span="7" id="savedqueries"><a>
-              <i class="far fa-save fa-2x"></i>
-              <el-button type="text" id="savedqueries2" @click="chooseSaved()">Saved Queries</el-button>
             </a>
           </el-col>
           <el-col :span="7" id="queryhistory"><a>
