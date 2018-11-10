@@ -11,7 +11,7 @@
             <el-menu :default-active="activeIndex2" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
               <el-menu-item index="/sjcx">数据查询</el-menu-item>
               <el-menu-item index="/sjcs">数据传输</el-menu-item>
-              <el-menu-item index="/sjjs">数据计算</el-menu-item>
+              <el-menu-item index="/sjjs">数据计算3</el-menu-item>
             </el-menu>
           </div>
         </el-col>

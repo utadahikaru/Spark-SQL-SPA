@@ -21,7 +21,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 //编辑器样式
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
-Vue.use(codemirror);
+// Vue.use(codemirror);
 
 // 全局样式
 import "@/assets/css/style.css";

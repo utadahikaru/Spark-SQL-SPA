@@ -16,21 +16,22 @@
         <div class="single-row-block2">
           <el-row>
             <el-col :span="3" id="col">
-              <i class="far fa-save fa-2x"></i>
-              <el-button type="text" id="textbutton">Save</el-button>
+              <el-button type="text" id="textbutton" @mouseover.native="textbutton1" @mouseout.native="textbutton2"><i class="far fa-save fa-2x"></i>Save</el-button>
             </el-col>
             <el-col :span="3" id="col">
-              <i class="fas fa-play fa-2x"></i>
-              <el-button type="text" id="textbutton">Execute</el-button>
+              <el-button type="text" id="textbutton"><i class="fas fa-play fa-2x"></i>Execute</el-button>
             </el-col>
-
           </el-row>
         </div>
-        <div class="single-row-block">
-          <codemirror v-model="code" :options="cmOptions"></codemirror>
+        <div>
+          <el-row>
+            <el-col :span="24">
+              <codemirror v-model="code" :options="cmOptions"></codemirror>
+            </el-col>
+          </el-row>
         </div>
         <div class="single-row-block3">
-          <el-col :span="7" id="queryresult"><a>
+          <el-col :span="15" id="queryresult"><a>
               <i class="far fa-comment-alt fa-2x"></i>
               <el-button type="text" @click="chooseResult()" id="queryresult2">Query Result</el-button>
             </a>
@@ -42,12 +43,32 @@
           </el-col>
         </div>
         <div class="single-row-block4">
-          <el-table :data="savedqueries" style="width: 100%">
-            <el-table-column prop="date" label="时间" width="180">
-            </el-table-column>
-            <el-table-column prop="content" label="查询文件" width="180">
-            </el-table-column>
-          </el-table>
+          <el-row>
+            <el-col :span="15" class="downcol">
+              <el-table :data="example" style="width: 100%" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor">
+                <el-table-column prop="date" label="序号" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="栏" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="栏" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="栏" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="栏" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="栏" width="180">
+                </el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="9">
+              <el-table :data="savedqueries" style="width: 100%" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor">
+                <el-table-column prop="date" label="时间" width="180">
+                </el-table-column>
+                <el-table-column prop="content" label="查询文件" width="180">
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </div>
 
       </el-main>
@@ -95,15 +116,20 @@ import "codemirror/addon/fold/xml-fold.js";
 
 export default {
   methods: {
-    onCmReady(cm) {
-      console.log("the editor is readied!", cm);
+    tableRowStyle({ row, rowIndex }) {
+      return "background-color: #003333;color:aqua;";
     },
-    onCmFocus(cm) {
-      console.log("the editor is focus!", cm);
+    // 修改table header的背景色
+    tableHeaderColor({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return "background-color: #003333;color: #F7F6Fd;font-weight: 500;";
+      }
     },
-    onCmCodeChange(newCode) {
-      console.log("this is new code", newCode);
-      this.code = newCode;
+    textbutton1() {
+      document.getElementById("textbutton").style.color = "aqua";
+    },
+    textbutton2() {
+      document.getElementById("textbutton").style.color = "white";
     },
     chooseFile() {
       document.getElementById("thefileicon").style.color = "#344352";
@@ -121,27 +147,15 @@ export default {
     },
     chooseResult() {
       document.getElementById("queryresult").style.color = "#8db6ec";
-      document.getElementById("savedqueries").style.color = "white";
       document.getElementById("queryhistory").style.color = "white";
       document.getElementById("queryresult2").style.color = "#8db6ec";
-      document.getElementById("savedqueries2").style.color = "white";
       document.getElementById("queryhistory2").style.color = "white";
-    },
-    chooseSaved() {
-      document.getElementById("savedqueries").style.color = "#8db6ec";
-      document.getElementById("queryhistory").style.color = "white";
-      document.getElementById("queryresult").style.color = "white";
-      document.getElementById("savedqueries2").style.color = "#8db6ec";
-      document.getElementById("queryhistory2").style.color = "white";
-      document.getElementById("queryresult2").style.color = "white";
     },
     chooseHistory() {
       document.getElementById("queryhistory").style.color = "#8db6ec";
       document.getElementById("queryresult").style.color = "white";
-      document.getElementById("savedqueries").style.color = "white";
       document.getElementById("queryhistory2").style.color = "#8db6ec";
       document.getElementById("queryresult2").style.color = "white";
-      document.getElementById("savedqueries2").style.color = "white";
     }
   },
   computed: {
@@ -153,12 +167,9 @@ export default {
     codemirror
   },
   mounted() {
-    document.getElementById("fileicon").style.color = "#344352";
-    document.getElementById("thefileicon").style.color = "#344352";
-    document.getElementById("files").style.color = "#344352";
-    setTimeout(() => {
-      (this.styleSelectedText = true), (this.cmOption.styleActiveLine = true);
-    }, 1800);
+    // document.getElementById("fileicon").style.color = "#344352";
+    // document.getElementById("thefileicon").style.color = "#344352";
+    // document.getElementById("files").style.color = "#344352";
   },
   data() {
     return {
@@ -166,6 +177,20 @@ export default {
         {
           date: "8小时前",
           content: "nm$l.sql"
+        }
+      ],
+      example: [
+        {
+          date: "1",
+          content: "row"
+        },
+        {
+          date: "2",
+          content: "row"
+        },
+        {
+          date: "3",
+          content: "row"
         }
       ],
       leftMode: "file",
@@ -265,22 +290,10 @@ export default {
   margin-right: 20px;
   color: #8db6ec;
 }
-#savedqueries {
-  margin-left: 6px;
-  margin-top: 6px;
-  margin-right: 20px;
-  color: white;
-}
-#savedqueries2 {
-  margin-left: 6px;
-  margin-top: 6px;
-  margin-right: 20px;
-  color: white;
-}
 #col {
   margin-left: 6px;
-  margin-top: 6px;
-  margin-right: 20px;
+  margin-top: -4px;
+  margin-right: 0px;
   color: white;
 }
 .test {
@@ -343,5 +356,8 @@ export default {
 }
 #textbutton {
   color: white;
+}
+.downcol {
+  height: 100px;
 }
 </style>
